@@ -23,7 +23,7 @@ Some benefits of self-hosting your LLM are:
 * Save computational costs
 * Easy to get started for those new to or just starting their journey with LLMs
 
-## Current LLM Use Cases:
+## LLM Use Cases
 
 There are various applications for LLMs such as text generation, speech recognition and RAG applications. For the purpose of this demo, we are considering a speech recognition application:
 
