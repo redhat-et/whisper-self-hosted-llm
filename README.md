@@ -1,6 +1,6 @@
-# Self-Hosted LLMs
+# Whisper Self-Hosted LLM
 
-This repo contains artifacts that can be used to build and run LLM (Large Language Model) services locally on your laptops using containerization methods.
+This repo contains artifacts that can be used to build and run the [Whisper LLM](https://github.com/openai/whisper) (Large Language Model) service locally on your laptops using containerization methods.
 These containerized LLM services can be used to help developers quickly prototype new LLM based applications, without the need for relying
 on any other externally hosted services.
 
@@ -25,7 +25,7 @@ Some benefits of self-hosting your LLM are:
 
 ## Current LLM Use Cases:
 
-There are various applications for LLMs and some of the use cases we are looking into include text generation, speech recognition and RAG applications. Currently, the use cases we have available are:
+There are various applications for LLMs such as text generation, speech recognition and RAG applications. For the purpose of this demo, we are considering a speech recognition application:
 
 * [Speech Recognition](#speech-recognition)
 
