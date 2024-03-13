@@ -58,15 +58,16 @@ podman run --rm -it \
         -e PORT=8001 \
         whisper:image
 ```
+### Run Streamlit application
 
-To test with the default `/app/jfk.wav` audio file included in the image:
-
+To run the streamlit application:
 ```bash
-curl -v http://0.0.0.0:8001/inference -H "Content-Type: multipart/form-data" -F file=@/app/jfk.wav -F response-format="json"
+streamlit run streamlit/whisper_client.py
 ```
 
-To test with another audio file:
+This will open the streamlit UI as a localhost URL in your web browser. You can upload your audio files and view the translated text as follows:
 
-```bash
-curl -v http://0.0.0.0:8001/inference -H "Content-Type: multipart/form-data" -F file=@<path-to-audio-file> -F response-format="json"
-```
+<p align="center">
+<img src="../assets/whisper.png" width="70%">
+</p>
+
