@@ -1,4 +1,9 @@
-# Whisper Self-Hosted LLM
+# Whisper Self-Hosted LLM with Helm and Kind
+This repo is a fork of [this great project](https://github.com/redhat-et/whisper-self-hosted-llm) with self-host enhancements using:
+* Containerized streamlit
+* Kind as a local k8s provisioning
+* Helm charts for deployment
+* Start-up scripts
 
 This repo contains artifacts that can be used to build and run the [Whisper LLM](https://github.com/openai/whisper) (Large Language Model) service locally on your laptops using containerization methods.
 These containerized LLM services can be used to help developers quickly prototype new LLM based applications, without the need for relying
