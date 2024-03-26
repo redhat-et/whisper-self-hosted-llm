@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "whisper.whisper-llm-streamlit.fullname" . }}
+  labels:
+    {{- include "whisper.whisper-llm-streamlit.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.whisper.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "whisper.whisper-llm-streamlit.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.whisper.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "whisper.whisper-llm-streamlit.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.whisper.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "whisper.whisper-llm-streamlit.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.whisper.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.whisper.securityContext | nindent 12 }}
+          image: "{{ .Values.whisper.image.repository }}:{{ .Values.whisper.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.whisper.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.whisper.resources | nindent 12 }}
+          volumeMounts:
+            - name: modulevolume
+              mountPath: /models/
+      volumes:
+      - name: modulevolume
+        hostPath:
+          path: /models/
+          type: Directory
+      {{- with .Values.whisper.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.whisper.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.whisper.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

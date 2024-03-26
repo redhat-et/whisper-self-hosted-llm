@@ -1,0 +1,4 @@
+docker run  --name streamlitqday -it \
+ -p 8501:8501 \
+ --network=host \
+ streamlitqday

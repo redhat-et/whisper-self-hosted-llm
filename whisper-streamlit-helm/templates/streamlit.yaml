@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "streamlit.whisper-llm-streamlit.fullname" . }}
+  labels:
+    {{- include "streamlit.whisper-llm-streamlit.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.streamlit.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "streamlit.whisper-llm-streamlit.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.streamlit.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "streamlit.whisper-llm-streamlit.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.streamlit.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "streamlit.whisper-llm-streamlit.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.streamlit.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.streamlit.securityContext | nindent 12 }}
+          image: "{{ .Values.streamlit.image.repository }}:{{ .Values.streamlit.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.streamlit.image.pullPolicy }}
+          env:
+            - name: MODEL_ENDPOINT
+              value: {{ include "whisper.whisper-llm-streamlit.fullname" . }}
+            - name: NAMESPACE
+              value: {{ .Release.Namespace }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.streamlit.resources | nindent 12 }}
+      {{- with .Values.streamlit.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.streamlit.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.streamlit.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
