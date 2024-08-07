@@ -55,7 +55,7 @@ You should now be able to see this image created when you run `podman images`.
 
 ### Step 3: Download audio files
 
-Download few sample audio files (WAV, MP3, MP4, FLAC or MPEG4 formats) on your laptop which you can use for testing the model. We have also uplaoded few sample audio files to this repository which are available for use [here](https://github.com/redhat-et/whisper-self-hosted-llm/tree/main/data).
+Download few sample audio files (WAV, MP3, MP4, FLAC or MPEG4 formats) on your laptop which you can use for testing the model. We have also uploaded few sample audio files to this repository which are available for use [here](https://github.com/redhat-et/whisper-self-hosted-llm/tree/main/data).
 
 ### Step 4: Deploy Model Service
 
