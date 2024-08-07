@@ -40,3 +40,7 @@ We are using the [OpenAI's Whisper model](https://github.com/openai/whisper) for
 * large
 
 We are using the compressed `.ggml` model binaries from HuggingFace which can be found here: https://huggingface.co/ggerganov/whisper.cpp.
+
+#### Running the Application
+
+To try out the application, please following the instructions mentioned [here](https://github.com/redhat-et/whisper-self-hosted-llm/blob/main/whisper-model-service/README.md)!
