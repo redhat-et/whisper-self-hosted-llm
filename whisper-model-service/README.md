@@ -18,7 +18,7 @@ provider = "applehv"
 ```
 * Ensure you have enough resources on your Podman machine. Recommended to have atleast `CPU: 8, Memory: 10 GB`
 
-### Download Model
+### Step 1: Download Model
 
 First, we need to download the Whisper model from HuggingFace. There are various Whisper models available which vary in size and can be found [here](https://huggingface.co/ggerganov/whisper.cpp). We will be using the `small` model which is about 466 MB.
 
@@ -33,7 +33,7 @@ wget --no-config --quiet --show-progress -O ggml-small.bin <Download URL>
 cd ../
 ```
 
-### Build Image
+### Step 2: Containerization
 
 Next, we will containerize this application by creating a container image within which the application will run. To do this, we have created a `Containerfile` which:
 
@@ -50,11 +50,11 @@ This will generate an image for your Containerfile which is nothing but an execu
 
 You should now be able to see this image created when you run `podman images`.
 
-### Download audio files
+### Step 3: Download audio files
 
 Download few sample audio files (WAV, MP3, MP4, FLAC or MPEG4 formats) on your laptop which you can use for testing the model.
 
-### Deploy Model Service
+### Step 4: Deploy Model Service
 
 Now, let's deploy the entire application and volume mount the model binary file to the image we have created from the previous step. We are mounting the `ggml-small.bin` model as downloaded from above and running the image.
 
@@ -71,7 +71,7 @@ podman run --rm -it \
 
 When completed successfully, you will see the Whisper model running as a service at `http://0.0.0.0:8001`.
 
-### Run Streamlit application
+### Step 5: Run Streamlit application
 
 In order to interact with the application, we have created a simple [Streamlit UI](https://streamlit.io/). Streamlit is an open-source Python framework for data scientists and AI/ML engineers to deliver interactive data apps – in only a few lines of code.
 
