@@ -1,4 +1,10 @@
+# Instructions for Self Hosting a LLM
+
+The following steps describe how you can setup an LLM locally using containerization techniques. We will be using a [Whisper](https://openai.com/index/whisper/) model to perform speech translation task i.e translating non-English speech to English text.
+
 ### Pre-Requisites
+
+* **Podman/Docker** installed
 
 If you are using an Apple MacBook M-series laptop, you will probably need to do the following configurations:
 
@@ -12,20 +18,14 @@ provider = "applehv"
 ```
 * Ensure you have enough resources on your Podman machine. Recommended to have atleast `CPU: 8, Memory: 10 GB`
 
-### Build Model Service
-
-From this directory,
-
-```bash
-podman build -t whisper:image .
-```
-
 ### Download Model
 
-We need to download the model from HuggingFace. There are various Whisper models available which vary in size and can be found [here](https://huggingface.co/ggerganov/whisper.cpp). We will be using the `small` model which is about 466 MB.
+First, we need to download the Whisper model from HuggingFace. There are various Whisper models available which vary in size and can be found [here](https://huggingface.co/ggerganov/whisper.cpp). We will be using the `small` model which is about 466 MB.
 
 - **small**
     - Download URL: [https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small.bin](https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small.bin)
+
+To download the model in the `models` folder of this repository:
 
 ```bash
 cd ../models
@@ -33,22 +33,32 @@ wget --no-config --quiet --show-progress -O ggml-small.bin <Download URL>
 cd ../
 ```
 
-### Download audio files
+### Build Image
 
-Whisper.cpp requires as an input 16-bit WAV audio files.
-By default, a sample `jfk.wav` file is included in the whisper image. This can be used to test with.
-To convert your input audio files to 16-bit WAV format you can use `ffmpeg` like this:
+Next, we will containerize this application by creating a container image within which the application will run. To do this, we have created a `Containerfile` which:
+
+* Clones the [Whisper](https://github.com/ggerganov/whisper.cpp.git) repo
+* Runs the whisper.cpp service (service to serve the Whisper model locally written in C++)
+
+To build this Containerfile, you will need to run (from this directory):
 
 ```bash
-ffmpeg -i <input.mp3> -ar 16000 -ac 1 -c:a pcm_s16le <output.wav>
+podman build -t whisper:image .
 ```
 
-The environment variable `AUDIO_FILE`, can be passed with your own audio file to override the default `/app/jfk.wav` file within the whisper image.
+This will generate an image for your Containerfile which is nothing but an executable file to run all the code.
+
+You should now be able to see this image created when you run `podman images`.
+
+### Download audio files
+
+Download few sample audio files (WAV, MP3, MP4, FLAC or MPEG4 formats) on your laptop which you can use for testing the model.
 
 ### Deploy Model Service
 
-Deploy the LLM and volume mount the model of choice.
-Here, we are mounting the `ggml-small.bin` model as downloaded from above.
+Now, let's deploy the entire application and volume mount the model binary file to the image we have created from the previous step. We are mounting the `ggml-small.bin` model as downloaded from above and running the image.
+
+To do this you can run:
 
 ```bash
 podman run --rm -it \
@@ -58,14 +68,24 @@ podman run --rm -it \
         -e PORT=8001 \
         whisper:image
 ```
+
+When completed successfully, you will see the Whisper model running as a service at `http://0.0.0.0:8001`.
+
 ### Run Streamlit application
 
-To run the streamlit application:
+In order to interact with the application, we have created a simple [Streamlit UI](https://streamlit.io/). Streamlit is an open-source Python framework for data scientists and AI/ML engineers to deliver interactive data apps – in only a few lines of code.
+
+To launch the streamlit application, run the following:
+
 ```bash
 streamlit run streamlit/whisper_client.py
 ```
 
-This will open the streamlit UI as a localhost URL in your web browser. You can upload your audio files and view the translated text as follows:
+This will open the streamlit UI as a localhost URL in your web browser.
+
+**Congrats! You have now successfully setup a LLM locally** 🥳 
+
+Now, try uploading your audio files and see if the model is able to translate it to English as text like so:
 
 <p align="center">
 <img src="../assets/whisper.png" width="70%">
