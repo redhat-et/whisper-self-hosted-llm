@@ -5,6 +5,7 @@ The following steps describe how you can setup an LLM locally using containeriza
 ### Pre-Requisites
 
 * **Podman/Docker** installed
+* **Streamlit** installed
 
 If you are using an Apple MacBook M-series laptop, you will probably need to do the following configurations:
 
@@ -40,6 +41,8 @@ Next, we will containerize this application by creating a container image within
 * Clones the [Whisper](https://github.com/ggerganov/whisper.cpp.git) repo
 * Runs the whisper.cpp service (service to serve the Whisper model locally written in C++)
 
+You can see the entire Containerfile defined [here](https://github.com/redhat-et/whisper-self-hosted-llm/blob/main/whisper-model-service/Containerfile).
+
 To build this Containerfile, you will need to run (from this directory):
 
 ```bash
@@ -69,13 +72,15 @@ podman run --rm -it \
         whisper:image
 ```
 
+Make sure to provide the full path to the location where you have downloaded the model binary file (from Step 1) when providing the `-v` argument in the above command.
+
 When completed successfully, you will see the Whisper model running as a service at `http://0.0.0.0:8001`.
 
 ### Step 5: Run Streamlit application
 
-In order to interact with the application, we have created a simple [Streamlit UI](https://streamlit.io/). Streamlit is an open-source Python framework for data scientists and AI/ML engineers to deliver interactive data apps – in only a few lines of code.
+In order to interact with the application, we have created a simple [Streamlit UI](https://streamlit.io/). Streamlit is an open-source Python framework for data scientists and AI/ML engineers to deliver interactive data apps – in only a few lines of code. Make sure you have `streamlit` installed on your machine.
 
-To launch the streamlit application, run the following:
+We have a Python file defined [here](https://github.com/redhat-et/whisper-self-hosted-llm/blob/main/whisper-model-service/streamlit/whisper_client.py) to build a simple Streamlit UI for this application. To launch the streamlit application, run the following:
 
 ```bash
 streamlit run streamlit/whisper_client.py
