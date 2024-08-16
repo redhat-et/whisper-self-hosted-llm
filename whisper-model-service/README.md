@@ -66,7 +66,7 @@ To do this you can run:
 ```bash
 podman run --rm -it \
         -p 8001:8001 \
-        -v /local/path/to/self-hosted-llms/models/ggml-small.bin:/models/ggml-small.bin:Z,ro \
+        -v /local/path/to/whisper-self-hosted-llm/models/ggml-small.bin:/models/ggml-small.bin:Z,ro \
         -e HOST=0.0.0.0 \
         -e PORT=8001 \
         whisper:image
